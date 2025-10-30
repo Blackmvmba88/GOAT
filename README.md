@@ -52,7 +52,10 @@ python main.py --fullscreen music.mp3
 
 ## 📖 Documentation
 
-For detailed documentation, see [USAGE.md](USAGE.md)
+- **[QUICKSTART.md](QUICKSTART.md)** - Get started in 5 minutes
+- **[USAGE.md](USAGE.md)** - Detailed usage guide and features
+- **[INSTALL.md](INSTALL.md)** - Platform-specific installation instructions
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design and architecture
 
 ## 🏗️ Architecture
 
