@@ -1,0 +1,24 @@
+# Core multimedia libraries
+pygame>=2.5.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+pillow>=10.0.0
+
+# Audio processing
+librosa>=0.10.0
+soundfile>=0.12.0
+pyaudio>=0.2.13
+
+# AI/ML integration
+openai>=1.0.0
+transformers>=4.30.0
+
+# Visualization
+matplotlib>=3.7.0
+scipy>=1.11.0
+
+# Cross-platform support
+pyqt6>=6.5.0
+
+# Utilities
+python-dotenv>=1.0.0
