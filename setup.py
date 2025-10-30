@@ -41,12 +41,6 @@ setup(
         "pyaudio>=0.2.13",
         "matplotlib>=3.7.0",
         "scipy>=1.11.0",
-        "pyqt6>=6.5.0",
         "python-dotenv>=1.0.0",
     ],
-    entry_points={
-        "console_scripts": [
-            "goat=main:main",
-        ],
-    },
 )

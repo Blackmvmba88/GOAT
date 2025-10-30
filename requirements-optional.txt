@@ -1,0 +1,17 @@
+# Optional dependencies for advanced features
+# Install with: pip install -r requirements-optional.txt
+
+# Advanced AI/ML features (future use)
+openai>=1.0.0
+transformers>=4.30.0
+torch>=2.0.0
+
+# Advanced UI (future use)
+pyqt6>=6.5.0
+
+# Development tools
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0

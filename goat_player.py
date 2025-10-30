@@ -213,7 +213,7 @@ class GOATPlayer:
     
     def _render_spectrum_visualization(self):
         """Render spectrum analyzer visualization"""
-        if not self.audio_features['spectral_centroid'] is None:
+        if self.audio_features['spectral_centroid'] is not None:
             # Get current position in audio
             pos = pygame.mixer.music.get_pos() / 1000.0  # Convert to seconds
             
