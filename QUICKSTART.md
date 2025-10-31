@@ -1,80 +1,80 @@
-# GOAT Quick Start Guide
+# Guía de Inicio Rápido GOAT
 
-Get up and running with GOAT in under 5 minutes!
+¡Empieza a usar GOAT en menos de 5 minutos!
 
-## Prerequisites
+## Requisitos Previos
 
-- Python 3.8+ installed
-- Audio output device
-- (Optional) Media files to play
+- Python 3.8+ instalado
+- Dispositivo de salida de audio
+- (Opcional) Archivos multimedia para reproducir
 
-## Installation (One Command)
+## Instalación (Un Comando)
 
 ```bash
 git clone https://github.com/Blackmvmba88/GOAT.git && cd GOAT && pip install -r requirements.txt
 ```
 
-## Your First Run
+## Tu Primera Ejecución
 
-### Option 1: Demo Mode (No Media Required)
+### Opción 1: Modo Demo (No Requiere Medios)
 
 ```bash
 python demo.py
 ```
 
-Press **SPACE** to start the demo, **V** to change visualizations, **Q** to quit.
+Presiona **ESPACIO** para iniciar la demo, **V** para cambiar visualizaciones, **Q** para salir.
 
-### Option 2: Play Your Music
-
-```bash
-python main.py /path/to/your/song.mp3
-```
-
-### Option 3: Play Video
+### Opción 2: Reproduce Tu Música
 
 ```bash
-python main.py /path/to/your/video.mp4
+python main.py /ruta/a/tu/cancion.mp3
 ```
 
-## Essential Controls
-
-| Key | Action |
-|-----|--------|
-| SPACE | Play/Pause |
-| S | Stop |
-| V | Change Visualization |
-| Q | Quit |
-
-## Common Use Cases
-
-### Full-Screen Music Visualization
+### Opción 3: Reproduce Video
 
 ```bash
-python main.py --fullscreen --width 1920 --height 1080 music.mp3
+python main.py /ruta/a/tu/video.mp4
 ```
 
-### Try Different Media Formats
+## Controles Esenciales
+
+| Tecla | Acción |
+|-------|--------|
+| ESPACIO | Reproducir/Pausar |
+| S | Detener |
+| V | Cambiar Visualización |
+| Q | Salir |
+
+## Casos de Uso Comunes
+
+### Visualización de Música en Pantalla Completa
+
+```bash
+python main.py --fullscreen --width 1920 --height 1080 musica.mp3
+```
+
+### Prueba Diferentes Formatos de Medios
 
 ```bash
 # Audio
-python main.py song.mp3    # MP3
-python main.py track.wav   # WAV
-python main.py audio.flac  # FLAC
+python main.py cancion.mp3    # MP3
+python main.py pista.wav      # WAV
+python main.py audio.flac     # FLAC
 
 # Video
 python main.py video.mp4   # MP4
 python main.py clip.mov    # MOV
-python main.py movie.mkv   # MKV
+python main.py pelicula.mkv   # MKV
 ```
 
-## Troubleshooting
+## Solución de Problemas
 
-### "Module not found" error
+### Error "Module not found"
 ```bash
 pip install -r requirements.txt
 ```
 
-### PyAudio installation fails
+### Falla la instalación de PyAudio
 **Linux:**
 ```bash
 sudo apt-get install portaudio19-dev
@@ -87,33 +87,33 @@ brew install portaudio
 pip install pyaudio
 ```
 
-### No audio plays
-- Check system volume
-- Verify file format is supported
-- Try a different audio file
+### No se reproduce audio
+- Verifica el volumen del sistema
+- Verifica que el formato del archivo sea compatible
+- Prueba con un archivo de audio diferente
 
-## What's Next?
+## ¿Qué Sigue?
 
-- Read [USAGE.md](USAGE.md) for detailed features
-- Check [ARCHITECTURE.md](ARCHITECTURE.md) to understand the design
-- See [INSTALL.md](INSTALL.md) for platform-specific setup
+- Lee [USAGE.md](USAGE.md) para características detalladas
+- Revisa [ARCHITECTURE.md](ARCHITECTURE.md) para entender el diseño
+- Consulta [INSTALL.md](INSTALL.md) para configuración específica por plataforma
 
-## Tips & Tricks
+## Consejos y Trucos
 
-1. **Best Visualization**: Try spectrum mode with electronic music
-2. **Performance**: Start with 1280x720, scale up if smooth
-3. **Exploration**: Press V multiple times to see all modes
-4. **Custom Config**: Edit `~/.goat/config.json` after first run
+1. **Mejor Visualización**: Prueba el modo espectro con música electrónica
+2. **Rendimiento**: Comienza con 1280x720, aumenta si es fluido
+3. **Exploración**: Presiona V varias veces para ver todos los modos
+4. **Configuración Personalizada**: Edita `~/.goat/config.json` después de la primera ejecución
 
-## Need Help?
+## ¿Necesitas Ayuda?
 
-- Check existing issues on GitHub
-- Review [USAGE.md](USAGE.md) documentation
-- Open a new issue with:
-  - Your OS and Python version
-  - Full error message
-  - Steps to reproduce
+- Revisa los problemas existentes en GitHub
+- Consulta la documentación [USAGE.md](USAGE.md)
+- Abre un nuevo issue con:
+  - Tu sistema operativo y versión de Python
+  - Mensaje de error completo
+  - Pasos para reproducir
 
 ---
 
-**Enjoy your intelligent multimedia experience!** 🎵🎨🤖
+**¡Disfruta tu experiencia multimedia inteligente!** 🎵🎨🤖

@@ -1,136 +1,136 @@
-# GOAT - Intelligent Multimedia Player
+# GOAT - Reproductor Multimedia Inteligente
 
-**Generative Organic Audio-visual Technology**
+**Tecnología Audiovisual Orgánica Generativa**
 
 Reproductor multimedia inteligente desarrollado bajo el proyecto GOAT. Diseñado para ofrecer una experiencia fluida, visual y sonora de alto rendimiento. Integración modular con IA, audio reactivo y soporte multiplataforma.
 
-## ✨ Features
+## ✨ Características
 
-- 🎵 **Multi-format Support**: Audio (MP3, WAV, OGG, FLAC, M4A) and Video (MP4, AVI, MOV, MKV)
-- 🎨 **Reactive Visuals**: Real-time audio analysis drives dynamic visualizations
-- 🤖 **AI Integration**: Mood detection, genre analysis, and adaptive color palettes
-- 🌈 **Multiple Visualization Modes**: Spectrum analyzer, waveform, particle systems
-- 💻 **Cross-platform**: Windows, macOS, Linux support
-- ⚡ **High Performance**: 60 FPS rendering with optimized audio analysis
-- 🎯 **Modular Architecture**: Easily extensible for custom features
+- 🎵 **Soporte Multi-formato**: Audio (MP3, WAV, OGG, FLAC, M4A) y Video (MP4, AVI, MOV, MKV)
+- 🎨 **Visuales Reactivos**: Análisis de audio en tiempo real impulsa visualizaciones dinámicas
+- 🤖 **Integración IA**: Detección de estado de ánimo, análisis de género y paletas de colores adaptativas
+- 🌈 **Múltiples Modos de Visualización**: Analizador de espectro, forma de onda, sistemas de partículas
+- 💻 **Multiplataforma**: Soporte para Windows, macOS, Linux
+- ⚡ **Alto Rendimiento**: Renderizado a 60 FPS con análisis de audio optimizado
+- 🎯 **Arquitectura Modular**: Fácilmente extensible para características personalizadas
 
-## 🚀 Quick Start
+## 🚀 Inicio Rápido
 
-### Installation
+### Instalación
 
 ```bash
-# Clone the repository
+# Clonar el repositorio
 git clone https://github.com/Blackmvmba88/GOAT.git
 cd GOAT
 
-# Install dependencies
+# Instalar dependencias
 pip install -r requirements.txt
 ```
 
-### Usage
+### Uso
 
 ```bash
-# Start the player
+# Iniciar el reproductor
 python main.py
 
-# Play a specific file
-python main.py /path/to/music.mp3
+# Reproducir un archivo específico
+python main.py /ruta/a/tu/musica.mp3
 
-# Custom window size
+# Tamaño de ventana personalizado
 python main.py --width 1920 --height 1080 video.mp4
 
-# Fullscreen mode
-python main.py --fullscreen music.mp3
+# Modo pantalla completa
+python main.py --fullscreen musica.mp3
 ```
 
-## 🎮 Controls
+## 🎮 Controles
 
-- **SPACE**: Play/Pause
-- **S**: Stop
-- **V**: Cycle visualization modes
-- **Q**: Quit
+- **ESPACIO**: Reproducir/Pausar
+- **S**: Detener
+- **V**: Cambiar modos de visualización
+- **Q**: Salir
 
-## 📖 Documentation
+## 📖 Documentación
 
-- **[QUICKSTART.md](QUICKSTART.md)** - Get started in 5 minutes
-- **[USAGE.md](USAGE.md)** - Detailed usage guide and features
-- **[INSTALL.md](INSTALL.md)** - Platform-specific installation instructions
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design and architecture
+- **[QUICKSTART.md](QUICKSTART.md)** - Comienza en 5 minutos
+- **[USAGE.md](USAGE.md)** - Guía de uso detallada y características
+- **[INSTALL.md](INSTALL.md)** - Instrucciones de instalación específicas por plataforma
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Diseño del sistema y arquitectura
 
-## 🏗️ Architecture
+## 🏗️ Arquitectura
 
 ```
 GOAT/
-├── main.py              # Entry point
-├── goat_player.py       # Core player with visualization
-├── ai_module.py         # AI integration and analysis
-├── config.py            # Configuration management
-├── requirements.txt     # Python dependencies
-└── USAGE.md            # Detailed documentation
+├── main.py              # Punto de entrada
+├── goat_player.py       # Reproductor principal con visualización
+├── ai_module.py         # Integración y análisis IA
+├── config.py            # Gestión de configuración
+├── requirements.txt     # Dependencias Python
+└── USAGE.md            # Documentación detallada
 ```
 
-## 🎨 Visualization Modes
+## 🎨 Modos de Visualización
 
-1. **Spectrum Analyzer**: Frequency-based bars responding to audio
-2. **Waveform**: Classic amplitude visualization
-3. **Particles**: Generative particle system driven by audio energy
+1. **Analizador de Espectro**: Barras basadas en frecuencia que responden al audio
+2. **Forma de Onda**: Visualización clásica de amplitud
+3. **Partículas**: Sistema generativo de partículas impulsado por energía de audio
 
-## 🤖 AI Features
+## 🤖 Características de IA
 
-- **Mood Detection**: Analyzes tempo and features (energetic, calm, upbeat, ambient)
-- **Adaptive Palettes**: Colors change based on detected mood
-- **Key Moments**: Identifies drops, crescendos, and transitions
-- **Genre Classification**: Estimates musical genre from audio analysis
+- **Detección de Estado de Ánimo**: Analiza tempo y características (energético, calmado, animado, ambiental)
+- **Paletas Adaptativas**: Los colores cambian según el estado de ánimo detectado
+- **Momentos Clave**: Identifica caídas, crescendos y transiciones
+- **Clasificación de Género**: Estima el género musical a partir del análisis de audio
 
-## 🛠️ Technology Stack
+## 🛠️ Stack Tecnológico
 
-- **pygame**: Graphics and audio playback
-- **librosa**: Audio analysis and feature extraction
-- **opencv-python**: Video processing
-- **numpy**: Numerical computations
-- **matplotlib/scipy**: Advanced visualizations
+- **pygame**: Gráficos y reproducción de audio
+- **librosa**: Análisis de audio y extracción de características
+- **opencv-python**: Procesamiento de video
+- **numpy**: Cálculos numéricos
+- **matplotlib/scipy**: Visualizaciones avanzadas
 
-## 💡 Examples
+## 💡 Ejemplos
 
-### Audio with Visualizations
+### Audio con Visualizaciones
 ```bash
-python main.py your_song.mp3
-# Press V to cycle through spectrum, waveform, and particles
+python main.py tu_cancion.mp3
+# Presiona V para alternar entre espectro, forma de onda y partículas
 ```
 
-### Video Playback
+### Reproducción de Video
 ```bash
-python main.py your_video.mp4
-# Enjoy fluid video playback with optional audio-reactive overlays
+python main.py tu_video.mp4
+# Disfruta de reproducción de video fluida con superposiciones reactivas al audio opcionales
 ```
 
-## 🌟 Future Enhancements
+## 🌟 Mejoras Futuras
 
-- Real-time audio effects and filters
-- Playlist management and smart recommendations
-- Streaming service integration
-- VR/AR visualization support
-- Machine learning-generated visuals
-- MIDI controller support
-- Plugin system for custom visualizers
+- Efectos de audio en tiempo real y filtros
+- Gestión de listas de reproducción y recomendaciones inteligentes
+- Integración con servicios de streaming
+- Soporte de visualización VR/AR
+- Visuales generados por aprendizaje automático
+- Soporte de controlador MIDI
+- Sistema de plugins para visualizadores personalizados
 
-## 🤝 Contributing
+## 🤝 Contribuir
 
-Contributions are welcome! Areas of interest:
-- New visualization algorithms
-- Enhanced AI models
-- Performance optimizations
-- UI/UX improvements
-- Documentation
+¡Las contribuciones son bienvenidas! Áreas de interés:
+- Nuevos algoritmos de visualización
+- Modelos de IA mejorados
+- Optimizaciones de rendimiento
+- Mejoras de UI/UX
+- Documentación
 
-## 📄 License
+## 📄 Licencia
 
-This project is licensed under the MIT License.
+Este proyecto está licenciado bajo la Licencia MIT.
 
-## 🙏 Acknowledgments
+## 🙏 Agradecimientos
 
-GOAT fuses technology, art, and sound to create a living interface that responds to your media. Experience multimedia the way it was meant to be - intelligent, adaptive, and beautiful.
+GOAT fusiona tecnología, arte y sonido para crear una interfaz viva que responde a tus medios. Experimenta multimedia como debe ser: inteligente, adaptativa y hermosa.
 
 ---
 
-**Made with ❤️ for the GOAT project**
+**Hecho con ❤️ para el proyecto GOAT**

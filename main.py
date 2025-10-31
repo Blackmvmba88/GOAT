@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-GOAT - Intelligent Multimedia Player
-Main entry point with cross-platform support
+GOAT - Reproductor Multimedia Inteligente
+Punto de entrada principal con soporte multiplataforma
 """
 
 import sys
@@ -12,7 +12,7 @@ import logging
 
 from goat_player import GOATPlayer
 
-# Configure logging
+# Configurar logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -21,69 +21,69 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    """Main entry point for GOAT player"""
+    """Punto de entrada principal para el reproductor GOAT"""
     parser = argparse.ArgumentParser(
-        description='GOAT - Intelligent Multimedia Player with AI and Reactive Visuals'
+        description='GOAT - Reproductor Multimedia Inteligente con IA y Visuales Reactivos'
     )
     parser.add_argument(
         'media',
         nargs='?',
-        help='Path to media file (audio or video)'
+        help='Ruta al archivo multimedia (audio o video)'
     )
     parser.add_argument(
         '--width',
         type=int,
         default=1280,
-        help='Window width (default: 1280)'
+        help='Ancho de ventana (predeterminado: 1280)'
     )
     parser.add_argument(
         '--height',
         type=int,
         default=720,
-        help='Window height (default: 720)'
+        help='Alto de ventana (predeterminado: 720)'
     )
     parser.add_argument(
         '--fullscreen',
         action='store_true',
-        help='Start in fullscreen mode'
+        help='Iniciar en modo pantalla completa'
     )
     
     args = parser.parse_args()
     
     try:
-        # Initialize player
-        logger.info("Starting GOAT Intelligent Multimedia Player...")
+        # Inicializar reproductor
+        logger.info("Iniciando Reproductor Multimedia Inteligente GOAT...")
         player = GOATPlayer(width=args.width, height=args.height)
         
-        # Load media if provided
+        # Cargar medios si se proporcionan
         if args.media:
             if not player.load_media(args.media):
-                logger.error("Failed to load media file")
+                logger.error("Error al cargar archivo multimedia")
                 return 1
             player.play()
         
-        # Main loop
+        # Bucle principal
         running = True
         while running:
-            # Handle events
+            # Manejar eventos
             for event in pygame.event.get():
                 if not player.handle_event(event):
                     running = False
                     break
             
-            # Render frame
+            # Renderizar fotograma
             player.render()
         
-        # Cleanup
+        # Limpieza
         player.cleanup()
-        logger.info("GOAT Player closed gracefully")
+        logger.info("Reproductor GOAT cerrado correctamente")
         return 0
         
     except KeyboardInterrupt:
-        logger.info("Interrupted by user")
+        logger.info("Interrumpido por el usuario")
         return 0
     except Exception as e:
-        logger.error(f"Fatal error: {e}", exc_info=True)
+        logger.error(f"Error fatal: {e}", exc_info=True)
         return 1
 
 

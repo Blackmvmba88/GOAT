@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-GOAT - Intelligent Multimedia Player
-Main player class with AI integration and reactive visuals
+GOAT - Reproductor Multimedia Inteligente
+Clase principal del reproductor con integración IA y visuales reactivos
 """
 
 import pygame
@@ -14,33 +14,33 @@ from pathlib import Path
 from typing import Optional, Tuple, List
 import logging
 
-# Configure logging
+# Configurar logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 
 class GOATPlayer:
     """
-    Intelligent multimedia player with AI integration and reactive visuals
+    Reproductor multimedia inteligente con integración IA y visuales reactivos
     """
     
     def __init__(self, width: int = 1280, height: int = 720):
-        """Initialize the GOAT player"""
+        """Inicializar el reproductor GOAT"""
         pygame.init()
         pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
         
         self.width = width
         self.height = height
         self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-        pygame.display.set_caption("GOAT - Intelligent Multimedia Player")
+        pygame.display.set_caption("GOAT - Reproductor Multimedia Inteligente")
         
-        # Player state
+        # Estado del reproductor
         self.playing = False
         self.paused = False
         self.current_media = None
-        self.media_type = None  # 'audio' or 'video'
+        self.media_type = None  # 'audio' o 'video'
         
-        # Audio analysis for reactive visuals
+        # Análisis de audio para visuales reactivos
         self.audio_data = None
         self.sample_rate = None
         self.audio_features = {
@@ -51,157 +51,157 @@ class GOATPlayer:
             'mfcc': None
         }
         
-        # Visualization settings
+        # Configuración de visualización
         self.visualization_mode = 'spectrum'  # 'spectrum', 'waveform', 'particles', 'ai_generated'
         self.colors = self._generate_color_palette()
         
-        # Video playback
+        # Reproducción de video
         self.video_cap = None
         self.video_fps = 30
         self.video_frame = None
         
-        # Clock for FPS control
+        # Reloj para control de FPS
         self.clock = pygame.time.Clock()
         self.target_fps = 60
         
-        logger.info("GOAT Player initialized successfully")
+        logger.info("Reproductor GOAT inicializado exitosamente")
     
     def _generate_color_palette(self) -> List[Tuple[int, int, int]]:
-        """Generate a vibrant color palette for visualizations"""
+        """Generar una paleta de colores vibrante para visualizaciones"""
         return [
-            (255, 0, 128),    # Pink
-            (0, 255, 255),    # Cyan
-            (255, 255, 0),    # Yellow
-            (128, 0, 255),    # Purple
-            (0, 255, 128),    # Green
-            (255, 128, 0),    # Orange
+            (255, 0, 128),    # Rosa
+            (0, 255, 255),    # Cian
+            (255, 255, 0),    # Amarillo
+            (128, 0, 255),    # Púrpura
+            (0, 255, 128),    # Verde
+            (255, 128, 0),    # Naranja
         ]
     
     def load_media(self, filepath: str) -> bool:
-        """Load audio or video file"""
+        """Cargar archivo de audio o video"""
         path = Path(filepath)
         
         if not path.exists():
-            logger.error(f"File not found: {filepath}")
+            logger.error(f"Archivo no encontrado: {filepath}")
             return False
         
         extension = path.suffix.lower()
         
-        # Audio formats
+        # Formatos de audio
         if extension in ['.mp3', '.wav', '.ogg', '.flac', '.m4a']:
             return self._load_audio(filepath)
-        # Video formats
+        # Formatos de video
         elif extension in ['.mp4', '.avi', '.mov', '.mkv', '.webm']:
             return self._load_video(filepath)
         else:
-            logger.error(f"Unsupported format: {extension}")
+            logger.error(f"Formato no compatible: {extension}")
             return False
     
     def _load_audio(self, filepath: str) -> bool:
-        """Load audio file and analyze for reactive visuals"""
+        """Cargar archivo de audio y analizar para visuales reactivos"""
         try:
-            logger.info(f"Loading audio file: {filepath}")
+            logger.info(f"Cargando archivo de audio: {filepath}")
             
-            # Load with pygame for playback
+            # Cargar con pygame para reproducción
             pygame.mixer.music.load(filepath)
             
-            # Load with librosa for analysis
+            # Cargar con librosa para análisis
             self.audio_data, self.sample_rate = librosa.load(filepath, sr=None)
             
-            # Perform audio analysis
+            # Realizar análisis de audio
             self._analyze_audio()
             
             self.current_media = filepath
             self.media_type = 'audio'
-            logger.info("Audio loaded successfully")
+            logger.info("Audio cargado exitosamente")
             return True
             
         except Exception as e:
-            logger.error(f"Error loading audio: {e}")
+            logger.error(f"Error al cargar audio: {e}")
             return False
     
     def _load_video(self, filepath: str) -> bool:
-        """Load video file"""
+        """Cargar archivo de video"""
         try:
-            logger.info(f"Loading video file: {filepath}")
+            logger.info(f"Cargando archivo de video: {filepath}")
             
             self.video_cap = cv2.VideoCapture(filepath)
             
             if not self.video_cap.isOpened():
-                logger.error("Failed to open video")
+                logger.error("Error al abrir video")
                 return False
             
             self.video_fps = self.video_cap.get(cv2.CAP_PROP_FPS)
             
-            # Try to extract audio for reactive visuals
-            # Note: In production, would use ffmpeg to extract audio track
+            # Intentar extraer audio para visuales reactivos
+            # Nota: En producción, usaría ffmpeg para extraer pista de audio
             
             self.current_media = filepath
             self.media_type = 'video'
-            logger.info("Video loaded successfully")
+            logger.info("Video cargado exitosamente")
             return True
             
         except Exception as e:
-            logger.error(f"Error loading video: {e}")
+            logger.error(f"Error al cargar video: {e}")
             return False
     
     def _analyze_audio(self):
-        """Analyze audio for reactive visualizations"""
+        """Analizar audio para visualizaciones reactivas"""
         if self.audio_data is None:
             return
         
         try:
-            logger.info("Analyzing audio features...")
+            logger.info("Analizando características de audio...")
             
-            # Tempo and beat tracking
+            # Tempo y seguimiento de ritmo
             tempo, beats = librosa.beat.beat_track(y=self.audio_data, sr=self.sample_rate)
             self.audio_features['tempo'] = tempo
             self.audio_features['beats'] = librosa.frames_to_time(beats, sr=self.sample_rate)
             
-            # Spectral centroid (brightness)
+            # Centroide espectral (brillo)
             self.audio_features['spectral_centroid'] = librosa.feature.spectral_centroid(
                 y=self.audio_data, sr=self.sample_rate
             )[0]
             
-            # Chroma features (harmonic content)
+            # Características de chroma (contenido armónico)
             self.audio_features['chroma'] = librosa.feature.chroma_stft(
                 y=self.audio_data, sr=self.sample_rate
             )
             
-            # MFCC (timbre features)
+            # MFCC (características de timbre)
             self.audio_features['mfcc'] = librosa.feature.mfcc(
                 y=self.audio_data, sr=self.sample_rate, n_mfcc=13
             )
             
-            logger.info(f"Audio analysis complete. Tempo: {tempo:.2f} BPM")
+            logger.info(f"Análisis de audio completo. Tempo: {tempo:.2f} BPM")
             
         except Exception as e:
-            logger.error(f"Error analyzing audio: {e}")
+            logger.error(f"Error al analizar audio: {e}")
     
     def play(self):
-        """Start or resume playback"""
+        """Iniciar o reanudar reproducción"""
         if self.media_type == 'audio':
             if self.paused:
                 pygame.mixer.music.unpause()
             else:
                 pygame.mixer.music.play()
         elif self.media_type == 'video':
-            pass  # Video playback handled in main loop
+            pass  # Reproducción de video manejada en bucle principal
         
         self.playing = True
         self.paused = False
-        logger.info("Playback started")
+        logger.info("Reproducción iniciada")
     
     def pause(self):
-        """Pause playback"""
+        """Pausar reproducción"""
         if self.media_type == 'audio':
             pygame.mixer.music.pause()
         
         self.paused = True
-        logger.info("Playback paused")
+        logger.info("Reproducción pausada")
     
     def stop(self):
-        """Stop playback"""
+        """Detener reproducción"""
         if self.media_type == 'audio':
             pygame.mixer.music.stop()
         elif self.media_type == 'video' and self.video_cap:
@@ -209,51 +209,51 @@ class GOATPlayer:
         
         self.playing = False
         self.paused = False
-        logger.info("Playback stopped")
+        logger.info("Reproducción detenida")
     
     def _render_spectrum_visualization(self):
-        """Render spectrum analyzer visualization"""
+        """Renderizar visualización de analizador de espectro"""
         if self.audio_features['spectral_centroid'] is not None:
-            # Get current position in audio
-            pos = pygame.mixer.music.get_pos() / 1000.0  # Convert to seconds
+            # Obtener posición actual en audio
+            pos = pygame.mixer.music.get_pos() / 1000.0  # Convertir a segundos
             
             if pos > 0 and pos < len(self.audio_data) / self.sample_rate:
-                # Get spectral data for current time
-                frame_idx = int(pos * self.sample_rate / 512)  # Hop length of 512
+                # Obtener datos espectrales para tiempo actual
+                frame_idx = int(pos * self.sample_rate / 512)  # Longitud de salto de 512
                 
                 if frame_idx < len(self.audio_features['spectral_centroid']):
-                    # Draw spectrum bars
+                    # Dibujar barras de espectro
                     num_bars = 64
                     bar_width = self.width // num_bars
                     
                     for i in range(num_bars):
                         if i < len(self.audio_features['spectral_centroid']):
-                            # Calculate bar height based on spectral content
+                            # Calcular altura de barra basada en contenido espectral
                             height = int(self.audio_features['spectral_centroid'][min(frame_idx, len(self.audio_features['spectral_centroid'])-1)] / 100)
                             height = min(height, self.height - 100)
                             
-                            # Color based on frequency
+                            # Color basado en frecuencia
                             color = self.colors[i % len(self.colors)]
                             
-                            # Draw bar
+                            # Dibujar barra
                             x = i * bar_width
                             y = self.height - height
                             pygame.draw.rect(self.screen, color, (x, y, bar_width - 2, height))
     
     def _render_waveform_visualization(self):
-        """Render waveform visualization"""
+        """Renderizar visualización de forma de onda"""
         if self.audio_data is not None:
             pos = pygame.mixer.music.get_pos() / 1000.0
             
             if pos > 0:
-                # Get segment of waveform
+                # Obtener segmento de forma de onda
                 start_sample = int(pos * self.sample_rate)
-                end_sample = start_sample + self.sample_rate // 10  # 100ms window
+                end_sample = start_sample + self.sample_rate // 10  # Ventana de 100ms
                 
                 if end_sample < len(self.audio_data):
                     segment = self.audio_data[start_sample:end_sample]
                     
-                    # Downsample for display
+                    # Submuestreo para visualización
                     points_to_show = min(self.width, len(segment))
                     step = len(segment) // points_to_show
                     
@@ -266,13 +266,13 @@ class GOATPlayer:
                             y = int(self.height / 2 + amplitude * self.height / 4)
                             points.append((x, y))
                     
-                    # Draw waveform
+                    # Dibujar forma de onda
                     if len(points) > 1:
                         pygame.draw.lines(self.screen, self.colors[0], False, points, 2)
     
     def _render_particles_visualization(self):
-        """Render particle-based visualization"""
-        # Simple particle effect based on audio features
+        """Renderizar visualización basada en partículas"""
+        # Efecto simple de partículas basado en características de audio
         if self.audio_features['spectral_centroid'] is not None:
             pos = pygame.mixer.music.get_pos() / 1000.0
             frame_idx = int(pos * self.sample_rate / 512)
@@ -280,7 +280,7 @@ class GOATPlayer:
             if frame_idx < len(self.audio_features['spectral_centroid']):
                 energy = self.audio_features['spectral_centroid'][frame_idx]
                 
-                # Draw particles based on energy
+                # Dibujar partículas basadas en energía
                 num_particles = int(energy / 50)
                 for i in range(min(num_particles, 100)):
                     x = np.random.randint(0, self.width)
@@ -290,35 +290,35 @@ class GOATPlayer:
                     pygame.draw.circle(self.screen, color, (x, y), radius)
     
     def _render_video_frame(self):
-        """Render current video frame"""
+        """Renderizar fotograma de video actual"""
         if self.video_cap and self.playing:
             ret, frame = self.video_cap.read()
             
             if ret:
-                # Convert BGR to RGB
+                # Convertir BGR a RGB
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 
-                # Resize to fit screen
+                # Redimensionar para ajustar a pantalla
                 frame = cv2.resize(frame, (self.width, self.height))
                 
-                # Convert to pygame surface
+                # Convertir a superficie pygame
                 frame = np.rot90(frame)
                 frame = pygame.surfarray.make_surface(frame)
                 
                 self.screen.blit(frame, (0, 0))
                 self.video_frame = frame
             else:
-                # Video ended, loop or stop
+                # Video terminado, repetir o detener
                 self.video_cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
     
     def render(self):
-        """Render current frame"""
-        self.screen.fill((0, 0, 0))  # Clear screen
+        """Renderizar fotograma actual"""
+        self.screen.fill((0, 0, 0))  # Limpiar pantalla
         
         if self.media_type == 'video':
             self._render_video_frame()
         elif self.media_type == 'audio' and self.playing:
-            # Render audio visualization
+            # Renderizar visualización de audio
             if self.visualization_mode == 'spectrum':
                 self._render_spectrum_visualization()
             elif self.visualization_mode == 'waveform':
@@ -326,44 +326,44 @@ class GOATPlayer:
             elif self.visualization_mode == 'particles':
                 self._render_particles_visualization()
         
-        # Draw UI overlay
+        # Dibujar superposición de UI
         self._render_ui()
         
         pygame.display.flip()
         self.clock.tick(self.target_fps)
     
     def _render_ui(self):
-        """Render UI overlay"""
+        """Renderizar superposición de interfaz"""
         font = pygame.font.Font(None, 36)
         small_font = pygame.font.Font(None, 24)
         
-        # Title
-        title = font.render("GOAT - Intelligent Media Player", True, (255, 255, 255))
+        # Título
+        title = font.render("GOAT - Reproductor Multimedia Inteligente", True, (255, 255, 255))
         self.screen.blit(title, (10, 10))
         
-        # Status
+        # Estado
         if self.current_media:
             filename = Path(self.current_media).name
-            media_text = small_font.render(f"Media: {filename}", True, (200, 200, 200))
+            media_text = small_font.render(f"Medio: {filename}", True, (200, 200, 200))
             self.screen.blit(media_text, (10, 50))
         
-        # Playback status
-        status = "Playing" if self.playing and not self.paused else "Paused" if self.paused else "Stopped"
-        status_text = small_font.render(f"Status: {status}", True, (200, 200, 200))
+        # Estado de reproducción
+        status = "Reproduciendo" if self.playing and not self.paused else "Pausado" if self.paused else "Detenido"
+        status_text = small_font.render(f"Estado: {status}", True, (200, 200, 200))
         self.screen.blit(status_text, (10, 75))
         
-        # Visualization mode (for audio)
+        # Modo de visualización (para audio)
         if self.media_type == 'audio':
-            vis_text = small_font.render(f"Visualization: {self.visualization_mode}", True, (200, 200, 200))
+            vis_text = small_font.render(f"Visualización: {self.visualization_mode}", True, (200, 200, 200))
             self.screen.blit(vis_text, (10, 100))
         
-        # Controls help
+        # Ayuda de controles
         help_text = [
-            "Controls:",
-            "SPACE - Play/Pause",
-            "S - Stop",
-            "V - Change Visualization",
-            "Q - Quit"
+            "Controles:",
+            "ESPACIO - Reproducir/Pausar",
+            "S - Detener",
+            "V - Cambiar Visualización",
+            "Q - Salir"
         ]
         
         y_offset = self.height - 120
@@ -373,14 +373,14 @@ class GOATPlayer:
             y_offset += 25
     
     def cycle_visualization(self):
-        """Cycle through visualization modes"""
+        """Alternar entre modos de visualización"""
         modes = ['spectrum', 'waveform', 'particles']
         current_idx = modes.index(self.visualization_mode)
         self.visualization_mode = modes[(current_idx + 1) % len(modes)]
-        logger.info(f"Visualization mode: {self.visualization_mode}")
+        logger.info(f"Modo de visualización: {self.visualization_mode}")
     
     def handle_event(self, event):
-        """Handle pygame events"""
+        """Manejar eventos de pygame"""
         if event.type == pygame.QUIT:
             return False
         
@@ -408,9 +408,9 @@ class GOATPlayer:
         return True
     
     def cleanup(self):
-        """Clean up resources"""
+        """Limpiar recursos"""
         if self.video_cap:
             self.video_cap.release()
         pygame.mixer.quit()
         pygame.quit()
-        logger.info("GOAT Player closed")
+        logger.info("Reproductor GOAT cerrado")
