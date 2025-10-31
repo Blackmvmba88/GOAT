@@ -88,7 +88,7 @@ GOAT/
 - **librosa**: Audio analysis and feature extraction
 - **opencv-python**: Video processing
 - **numpy**: Numerical computations
-- **PyQt6**: Cross-platform UI support
+- **matplotlib/scipy**: Advanced visualizations
 
 ## 💡 Examples
 
