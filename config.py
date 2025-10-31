@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-GOAT Configuration Module
-Manages settings and configuration for the player
+GOAT Módulo de Configuración
+Gestiona ajustes y configuración para el reproductor
 """
 
 import json
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class Config:
-    """Configuration manager for GOAT player"""
+    """Gestor de configuración para reproductor GOAT"""
     
     DEFAULT_CONFIG = {
         'display': {
@@ -32,12 +32,12 @@ class Config:
             'enable_ai': True,
             'particle_count': 100,
             'color_themes': [
-                'vibrant',
+                'vibrante',
                 'pastel',
-                'dark',
-                'neon'
+                'oscuro',
+                'neón'
             ],
-            'default_theme': 'vibrant'
+            'default_theme': 'vibrante'
         },
         'ai': {
             'enable_mood_detection': True,
@@ -53,45 +53,45 @@ class Config:
     }
     
     def __init__(self, config_path: str = None):
-        """Initialize configuration"""
+        """Inicializar configuración"""
         self.config_path = config_path or Path.home() / '.goat' / 'config.json'
         self.config = self._load_config()
     
     def _load_config(self) -> Dict[str, Any]:
-        """Load configuration from file or use defaults"""
+        """Cargar configuración desde archivo o usar predeterminados"""
         try:
             if Path(self.config_path).exists():
                 with open(self.config_path, 'r') as f:
                     user_config = json.load(f)
-                # Merge with defaults
+                # Combinar con predeterminados
                 config = self.DEFAULT_CONFIG.copy()
                 config.update(user_config)
-                logger.info(f"Loaded configuration from {self.config_path}")
+                logger.info(f"Configuración cargada desde {self.config_path}")
                 return config
             else:
-                logger.info("Using default configuration")
+                logger.info("Usando configuración predeterminada")
                 return self.DEFAULT_CONFIG.copy()
         except Exception as e:
-            logger.error(f"Error loading configuration: {e}")
+            logger.error(f"Error al cargar configuración: {e}")
             return self.DEFAULT_CONFIG.copy()
     
     def save_config(self) -> bool:
-        """Save current configuration to file"""
+        """Guardar configuración actual en archivo"""
         try:
-            # Create directory if it doesn't exist
+            # Crear directorio si no existe
             Path(self.config_path).parent.mkdir(parents=True, exist_ok=True)
             
             with open(self.config_path, 'w') as f:
                 json.dump(self.config, f, indent=2)
             
-            logger.info(f"Configuration saved to {self.config_path}")
+            logger.info(f"Configuración guardada en {self.config_path}")
             return True
         except Exception as e:
-            logger.error(f"Error saving configuration: {e}")
+            logger.error(f"Error al guardar configuración: {e}")
             return False
     
     def get(self, key: str, default: Any = None) -> Any:
-        """Get configuration value by key (supports dot notation)"""
+        """Obtener valor de configuración por clave (soporta notación de puntos)"""
         keys = key.split('.')
         value = self.config
         
@@ -104,7 +104,7 @@ class Config:
         return value
     
     def set(self, key: str, value: Any) -> bool:
-        """Set configuration value by key (supports dot notation)"""
+        """Establecer valor de configuración por clave (soporta notación de puntos)"""
         keys = key.split('.')
         config = self.config
         
@@ -117,48 +117,48 @@ class Config:
         return True
     
     def reset_to_defaults(self):
-        """Reset configuration to defaults"""
+        """Restablecer configuración a predeterminados"""
         self.config = self.DEFAULT_CONFIG.copy()
-        logger.info("Configuration reset to defaults")
+        logger.info("Configuración restablecida a predeterminados")
 
 
-# Color themes for visualizations
+# Temas de color para visualizaciones
 COLOR_THEMES = {
-    'vibrant': [
-        (255, 0, 128),    # Pink
-        (0, 255, 255),    # Cyan
-        (255, 255, 0),    # Yellow
-        (128, 0, 255),    # Purple
-        (0, 255, 128),    # Green
-        (255, 128, 0),    # Orange
+    'vibrante': [
+        (255, 0, 128),    # Rosa
+        (0, 255, 255),    # Cian
+        (255, 255, 0),    # Amarillo
+        (128, 0, 255),    # Púrpura
+        (0, 255, 128),    # Verde
+        (255, 128, 0),    # Naranja
     ],
     'pastel': [
-        (255, 179, 186),  # Pastel Pink
-        (186, 255, 201),  # Pastel Green
-        (186, 225, 255),  # Pastel Blue
-        (255, 223, 186),  # Pastel Orange
-        (230, 190, 255),  # Pastel Purple
-        (255, 255, 186),  # Pastel Yellow
+        (255, 179, 186),  # Rosa Pastel
+        (186, 255, 201),  # Verde Pastel
+        (186, 225, 255),  # Azul Pastel
+        (255, 223, 186),  # Naranja Pastel
+        (230, 190, 255),  # Púrpura Pastel
+        (255, 255, 186),  # Amarillo Pastel
     ],
-    'dark': [
-        (139, 0, 0),      # Dark Red
-        (0, 100, 0),      # Dark Green
-        (0, 0, 139),      # Dark Blue
-        (85, 26, 139),    # Dark Purple
-        (139, 69, 19),    # Dark Brown
-        (47, 79, 79),     # Dark Slate Gray
+    'oscuro': [
+        (139, 0, 0),      # Rojo Oscuro
+        (0, 100, 0),      # Verde Oscuro
+        (0, 0, 139),      # Azul Oscuro
+        (85, 26, 139),    # Púrpura Oscuro
+        (139, 69, 19),    # Marrón Oscuro
+        (47, 79, 79),     # Gris Pizarra Oscuro
     ],
-    'neon': [
-        (57, 255, 20),    # Neon Green
-        (255, 20, 147),   # Neon Pink
-        (0, 255, 255),    # Neon Cyan
-        (255, 255, 0),    # Neon Yellow
-        (255, 0, 255),    # Neon Magenta
-        (255, 128, 0),    # Neon Orange
+    'neón': [
+        (57, 255, 20),    # Verde Neón
+        (255, 20, 147),   # Rosa Neón
+        (0, 255, 255),    # Cian Neón
+        (255, 255, 0),    # Amarillo Neón
+        (255, 0, 255),    # Magenta Neón
+        (255, 128, 0),    # Naranja Neón
     ]
 }
 
 
 def get_color_theme(theme_name: str):
-    """Get color theme by name"""
-    return COLOR_THEMES.get(theme_name, COLOR_THEMES['vibrant'])
+    """Obtener tema de color por nombre"""
+    return COLOR_THEMES.get(theme_name, COLOR_THEMES['vibrante'])
