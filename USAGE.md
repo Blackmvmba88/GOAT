@@ -1,42 +1,42 @@
-# GOAT - Intelligent Multimedia Player
+# GOAT - Reproductor Multimedia Inteligente
 
-## Usage Guide
+## Guía de Uso
 
-GOAT (Generative Organic Audio-visual Technology) is an intelligent multimedia player that combines AI analysis, reactive visuals, and cross-platform support to create a living, breathing media experience.
+GOAT (Tecnología Audiovisual Orgánica Generativa) es un reproductor multimedia inteligente que combina análisis IA, visuales reactivos y soporte multiplataforma para crear una experiencia de medios viva y palpitante.
 
-## Features
+## Características
 
-### Core Capabilities
-- **Multi-format Support**: Play audio (MP3, WAV, OGG, FLAC, M4A) and video (MP4, AVI, MOV, MKV, WEBM)
-- **Reactive Visuals**: Real-time audio analysis drives dynamic visualizations
-- **AI Integration**: Intelligent mood detection, genre analysis, and adaptive color palettes
-- **Cross-platform**: Works on Windows, macOS, and Linux
-- **Modular Architecture**: Easy to extend with new visualization modes and AI features
+### Capacidades Principales
+- **Soporte Multi-formato**: Reproduce audio (MP3, WAV, OGG, FLAC, M4A) y video (MP4, AVI, MOV, MKV, WEBM)
+- **Visuales Reactivos**: Análisis de audio en tiempo real impulsa visualizaciones dinámicas
+- **Integración IA**: Detección inteligente de estado de ánimo, análisis de género y paletas de colores adaptativas
+- **Multiplataforma**: Funciona en Windows, macOS y Linux
+- **Arquitectura Modular**: Fácil de extender con nuevos modos de visualización y características IA
 
-### Visualization Modes
-1. **Spectrum Analyzer**: Frequency-based visualization with colored bars
-2. **Waveform**: Classic waveform display showing audio amplitude
-3. **Particles**: Generative particle system responding to audio energy
+### Modos de Visualización
+1. **Analizador de Espectro**: Visualización basada en frecuencia con barras de colores
+2. **Forma de Onda**: Visualización clásica de forma de onda mostrando amplitud de audio
+3. **Partículas**: Sistema generativo de partículas que responde a la energía del audio
 
-### AI Features
-- **Mood Detection**: Analyzes tempo and audio features to detect mood (energetic, calm, upbeat, etc.)
-- **Adaptive Color Palettes**: Colors change based on detected mood
-- **Key Moment Detection**: Identifies drops, crescendos, and other significant moments
-- **Genre Classification**: Estimates musical genre from audio features
+### Características IA
+- **Detección de Estado de Ánimo**: Analiza tempo y características de audio para detectar estado de ánimo (energético, calmado, animado, etc.)
+- **Paletas de Colores Adaptativas**: Los colores cambian según el estado de ánimo detectado
+- **Detección de Momentos Clave**: Identifica caídas, crescendos y otros momentos significativos
+- **Clasificación de Género**: Estima el género musical a partir de características de audio
 
-## Installation
+## Instalación
 
-### Requirements
-- Python 3.8 or higher
-- System audio libraries (varies by platform)
+### Requisitos
+- Python 3.8 o superior
+- Bibliotecas de audio del sistema (varía según plataforma)
 
-### Install Dependencies
+### Instalar Dependencias
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Platform-Specific Notes
+### Notas Específicas por Plataforma
 
 #### Linux
 ```bash
