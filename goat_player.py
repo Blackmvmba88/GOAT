@@ -64,6 +64,28 @@ class GOATPlayer:
         self.clock = pygame.time.Clock()
         self.target_fps = 60
         
+        # NUEVAS FUNCIONALIDADES
+        # Lista de reproducción
+        self.playlist = []
+        self.current_track_index = 0
+        
+        # Control de volumen
+        self.volume = 0.7  # Volumen inicial 70%
+        pygame.mixer.music.set_volume(self.volume)
+        
+        # Modo repetición y aleatorio
+        self.loop_mode = False  # Repetir lista completa
+        self.loop_one = False   # Repetir una canción
+        self.shuffle_mode = False
+        
+        # Historial de reproducción
+        self.history = []
+        self.max_history = 50
+        
+        # Duración del medio
+        self.media_duration = 0
+        self.media_position = 0
+        
         logger.info("Reproductor GOAT inicializado exitosamente")
     
     def _generate_color_palette(self) -> List[Tuple[int, int, int]]:
@@ -185,6 +207,8 @@ class GOATPlayer:
                 pygame.mixer.music.unpause()
             else:
                 pygame.mixer.music.play()
+                # Configurar evento de fin de música para auto-siguiente
+                pygame.mixer.music.set_endevent(pygame.USEREVENT)
         elif self.media_type == 'video':
             pass  # Reproducción de video manejada en bucle principal
         
@@ -210,6 +234,115 @@ class GOATPlayer:
         self.playing = False
         self.paused = False
         logger.info("Reproducción detenida")
+    
+    # NUEVOS MÉTODOS - FUNCIONALIDADES ROBUSTAS
+    
+    def add_to_playlist(self, filepath: str) -> bool:
+        """Agregar archivo a la lista de reproducción"""
+        path = Path(filepath)
+        if path.exists():
+            self.playlist.append(str(path))
+            logger.info(f"Agregado a playlist: {path.name}")
+            return True
+        return False
+    
+    def load_playlist(self, filepaths: List[str]):
+        """Cargar múltiples archivos en la playlist"""
+        self.playlist = []
+        for filepath in filepaths:
+            self.add_to_playlist(filepath)
+        logger.info(f"Playlist cargada con {len(self.playlist)} archivos")
+    
+    def next_track(self):
+        """Reproducir siguiente pista en la playlist"""
+        if not self.playlist:
+            return
+        
+        if self.shuffle_mode:
+            import random
+            self.current_track_index = random.randint(0, len(self.playlist) - 1)
+        else:
+            self.current_track_index = (self.current_track_index + 1) % len(self.playlist)
+        
+        self.stop()
+        if self.load_media(self.playlist[self.current_track_index]):
+            self.play()
+            self._add_to_history(self.playlist[self.current_track_index])
+        logger.info(f"Reproduciendo pista {self.current_track_index + 1}/{len(self.playlist)}")
+    
+    def previous_track(self):
+        """Reproducir pista anterior en la playlist"""
+        if not self.playlist:
+            return
+        
+        self.current_track_index = (self.current_track_index - 1) % len(self.playlist)
+        self.stop()
+        if self.load_media(self.playlist[self.current_track_index]):
+            self.play()
+            self._add_to_history(self.playlist[self.current_track_index])
+        logger.info(f"Reproduciendo pista {self.current_track_index + 1}/{len(self.playlist)}")
+    
+    def increase_volume(self, amount: float = 0.1):
+        """Aumentar volumen"""
+        self.volume = min(1.0, self.volume + amount)
+        pygame.mixer.music.set_volume(self.volume)
+        logger.info(f"Volumen: {int(self.volume * 100)}%")
+    
+    def decrease_volume(self, amount: float = 0.1):
+        """Disminuir volumen"""
+        self.volume = max(0.0, self.volume - amount)
+        pygame.mixer.music.set_volume(self.volume)
+        logger.info(f"Volumen: {int(self.volume * 100)}%")
+    
+    def toggle_loop(self):
+        """Alternar modo repetición"""
+        self.loop_mode = not self.loop_mode
+        estado = "activado" if self.loop_mode else "desactivado"
+        logger.info(f"Modo repetición {estado}")
+    
+    def toggle_loop_one(self):
+        """Alternar repetición de una sola pista"""
+        self.loop_one = not self.loop_one
+        estado = "activado" if self.loop_one else "desactivado"
+        logger.info(f"Repetir una pista {estado}")
+    
+    def toggle_shuffle(self):
+        """Alternar modo aleatorio"""
+        self.shuffle_mode = not self.shuffle_mode
+        estado = "activado" if self.shuffle_mode else "desactivado"
+        logger.info(f"Modo aleatorio {estado}")
+    
+    def _add_to_history(self, filepath: str):
+        """Agregar a historial de reproducción"""
+        if filepath in self.history:
+            self.history.remove(filepath)
+        self.history.insert(0, filepath)
+        if len(self.history) > self.max_history:
+            self.history = self.history[:self.max_history]
+    
+    def get_position(self) -> float:
+        """Obtener posición actual de reproducción en segundos"""
+        if self.media_type == 'audio' and self.playing:
+            pos_ms = pygame.mixer.music.get_pos()
+            if pos_ms >= 0:
+                return pos_ms / 1000.0
+        return 0.0
+    
+    def get_duration(self) -> float:
+        """Obtener duración total del medio en segundos"""
+        if self.audio_data is not None:
+            return len(self.audio_data) / self.sample_rate
+        return 0.0
+    
+    def seek(self, position: float):
+        """Buscar posición específica en el medio (en segundos)"""
+        if self.media_type == 'audio':
+            # pygame.mixer.music no soporta seek directo, reiniciar y avanzar
+            try:
+                pygame.mixer.music.play(start=position)
+                logger.info(f"Buscando posición: {position:.1f}s")
+            except:
+                logger.warning("Búsqueda no soportada para este formato")
     
     def _render_spectrum_visualization(self):
         """Renderizar visualización de analizador de espectro"""
@@ -336,6 +469,7 @@ class GOATPlayer:
         """Renderizar superposición de interfaz"""
         font = pygame.font.Font(None, 36)
         small_font = pygame.font.Font(None, 24)
+        tiny_font = pygame.font.Font(None, 20)
         
         # Título
         title = font.render("GOAT - Reproductor Multimedia Inteligente", True, (255, 255, 255))
@@ -357,20 +491,69 @@ class GOATPlayer:
             vis_text = small_font.render(f"Visualización: {self.visualization_mode}", True, (200, 200, 200))
             self.screen.blit(vis_text, (10, 100))
         
-        # Ayuda de controles
+        # NUEVA INFO: Volumen
+        volume_text = small_font.render(f"Volumen: {int(self.volume * 100)}%", True, (150, 255, 150))
+        self.screen.blit(volume_text, (10, 125))
+        
+        # NUEVA INFO: Playlist
+        if self.playlist:
+            playlist_text = small_font.render(f"Playlist: {self.current_track_index + 1}/{len(self.playlist)}", True, (255, 200, 100))
+            self.screen.blit(playlist_text, (10, 150))
+        
+        # NUEVA INFO: Modos activos
+        modes = []
+        if self.loop_mode:
+            modes.append("Repetir")
+        if self.loop_one:
+            modes.append("Repetir1")
+        if self.shuffle_mode:
+            modes.append("Aleatorio")
+        if modes:
+            modes_text = tiny_font.render(f"Modos: {', '.join(modes)}", True, (255, 255, 100))
+            self.screen.blit(modes_text, (10, 175))
+        
+        # NUEVA BARRA DE PROGRESO
+        if self.media_type == 'audio' and self.playing:
+            duration = self.get_duration()
+            position = self.get_position()
+            if duration > 0:
+                # Barra de progreso
+                bar_width = self.width - 40
+                bar_height = 8
+                bar_x = 20
+                bar_y = self.height - 180
+                
+                # Fondo de barra
+                pygame.draw.rect(self.screen, (50, 50, 50), (bar_x, bar_y, bar_width, bar_height))
+                
+                # Progreso
+                progress = min(position / duration, 1.0)
+                progress_width = int(bar_width * progress)
+                pygame.draw.rect(self.screen, (0, 200, 255), (bar_x, bar_y, progress_width, bar_height))
+                
+                # Tiempo
+                time_text = tiny_font.render(f"{self._format_time(position)} / {self._format_time(duration)}", True, (200, 200, 200))
+                self.screen.blit(time_text, (bar_x, bar_y - 20))
+        
+        # Ayuda de controles ACTUALIZADA
         help_text = [
-            "Controles:",
-            "ESPACIO - Reproducir/Pausar",
-            "S - Detener",
-            "V - Cambiar Visualización",
-            "Q - Salir"
+            "Controles Básicos:",
+            "ESPACIO-Play/Pausa | S-Stop | V-Visual | Q-Salir",
+            "Playlist: N-Siguiente | B-Anterior | L-Loop | R-Aleatorio",
+            "Volumen: +/- (Arriba/Abajo) | Seek: ←/→ (10s)"
         ]
         
-        y_offset = self.height - 120
+        y_offset = self.height - 100
         for line in help_text:
-            text = small_font.render(line, True, (150, 150, 150))
+            text = tiny_font.render(line, True, (120, 120, 120))
             self.screen.blit(text, (10, y_offset))
-            y_offset += 25
+            y_offset += 20
+    
+    def _format_time(self, seconds: float) -> str:
+        """Formatear tiempo en MM:SS"""
+        mins = int(seconds // 60)
+        secs = int(seconds % 60)
+        return f"{mins:02d}:{secs:02d}"
     
     def cycle_visualization(self):
         """Alternar entre modos de visualización"""
@@ -385,6 +568,7 @@ class GOATPlayer:
             return False
         
         elif event.type == pygame.KEYDOWN:
+            # Controles básicos
             if event.key == pygame.K_SPACE:
                 if self.playing and not self.paused:
                     self.pause()
@@ -399,11 +583,52 @@ class GOATPlayer:
             
             elif event.key == pygame.K_q:
                 return False
+            
+            # NUEVOS CONTROLES - Playlist
+            elif event.key == pygame.K_n:
+                self.next_track()
+            
+            elif event.key == pygame.K_b:
+                self.previous_track()
+            
+            # NUEVOS CONTROLES - Modos
+            elif event.key == pygame.K_l:
+                self.toggle_loop()
+            
+            elif event.key == pygame.K_o:
+                self.toggle_loop_one()
+            
+            elif event.key == pygame.K_r:
+                self.toggle_shuffle()
+            
+            # NUEVOS CONTROLES - Volumen
+            elif event.key == pygame.K_PLUS or event.key == pygame.K_EQUALS or event.key == pygame.K_UP:
+                self.increase_volume()
+            
+            elif event.key == pygame.K_MINUS or event.key == pygame.K_DOWN:
+                self.decrease_volume()
+            
+            # NUEVOS CONTROLES - Seek (buscar posición)
+            elif event.key == pygame.K_RIGHT:
+                current_pos = self.get_position()
+                self.seek(current_pos + 10)  # Avanzar 10 segundos
+            
+            elif event.key == pygame.K_LEFT:
+                current_pos = self.get_position()
+                self.seek(max(0, current_pos - 10))  # Retroceder 10 segundos
         
         elif event.type == pygame.VIDEORESIZE:
             self.width = event.w
             self.height = event.h
             self.screen = pygame.display.set_mode((self.width, self.height), pygame.RESIZABLE)
+        
+        # Manejar fin de reproducción para playlist
+        elif event.type == pygame.USEREVENT:
+            if self.playlist and (self.loop_mode or self.loop_one or self.current_track_index < len(self.playlist) - 1):
+                if self.loop_one:
+                    self.play()
+                else:
+                    self.next_track()
         
         return True
     

@@ -6,6 +6,7 @@ Reproductor multimedia inteligente desarrollado bajo el proyecto GOAT. Diseñado
 
 ## ✨ Características
 
+### Funcionalidades Core
 - 🎵 **Soporte Multi-formato**: Audio (MP3, WAV, OGG, FLAC, M4A) y Video (MP4, AVI, MOV, MKV)
 - 🎨 **Visuales Reactivos**: Análisis de audio en tiempo real impulsa visualizaciones dinámicas
 - 🤖 **Integración IA**: Detección de estado de ánimo, análisis de género y paletas de colores adaptativas
@@ -13,6 +14,16 @@ Reproductor multimedia inteligente desarrollado bajo el proyecto GOAT. Diseñado
 - 💻 **Multiplataforma**: Soporte para Windows, macOS, Linux
 - ⚡ **Alto Rendimiento**: Renderizado a 60 FPS con análisis de audio optimizado
 - 🎯 **Arquitectura Modular**: Fácilmente extensible para características personalizadas
+
+### 🚀 Nuevas Funcionalidades Robustas
+- 📋 **Playlist Completa**: Reproducción secuencial de múltiples archivos
+- 🔊 **Control de Volumen**: Ajuste fino de 0% a 100%
+- 📊 **Barra de Progreso**: Visualización de tiempo y posición
+- 🔁 **Modos de Repetición**: Loop playlist y repetir una pista
+- 🔀 **Modo Aleatorio**: Reproducción shuffle
+- ⏩ **Navegación Rápida**: Avanzar/retroceder con flechas
+- 📜 **Historial**: Registro de reproducción
+- 🎹 **15+ Atajos de Teclado**: Control completo sin mouse
 
 ## 🚀 Inicio Rápido
 
@@ -45,10 +56,25 @@ python main.py --fullscreen musica.mp3
 
 ## 🎮 Controles
 
+### Básicos
 - **ESPACIO**: Reproducir/Pausar
 - **S**: Detener
 - **V**: Cambiar modos de visualización
 - **Q**: Salir
+
+### Playlist y Navegación
+- **N**: Siguiente pista
+- **B**: Pista anterior
+- **→/←**: Avanzar/Retroceder 10 segundos
+
+### Volumen y Modos
+- **+/↑**: Aumentar volumen
+- **-/↓**: Disminuir volumen
+- **L**: Repetir playlist
+- **O**: Repetir una pista
+- **R**: Modo aleatorio
+
+📋 Ver [NUEVAS_FUNCIONALIDADES.md](NUEVAS_FUNCIONALIDADES.md) para guía completa
 
 ## 📖 Documentación
 
@@ -102,6 +128,19 @@ python main.py tu_cancion.mp3
 ```bash
 python main.py tu_video.mp4
 # Disfruta de reproducción de video fluida con superposiciones reactivas al audio opcionales
+```
+
+### Playlist con Múltiples Archivos
+```bash
+python main.py cancion1.mp3 cancion2.mp3 cancion3.mp3
+# O usar comodines
+python main.py musica/*.mp3
+```
+
+### Playlist Aleatoria con Loop
+```bash
+python main.py --shuffle --loop *.mp3
+# Reproducción continua en orden aleatorio
 ```
 
 ## 🌟 Mejoras Futuras

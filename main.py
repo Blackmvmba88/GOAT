@@ -27,8 +27,8 @@ def main():
     )
     parser.add_argument(
         'media',
-        nargs='?',
-        help='Ruta al archivo multimedia (audio o video)'
+        nargs='*',
+        help='Ruta(s) al archivo multimedia (audio o video). Múltiples archivos crean una playlist'
     )
     parser.add_argument(
         '--width',
@@ -47,6 +47,16 @@ def main():
         action='store_true',
         help='Iniciar en modo pantalla completa'
     )
+    parser.add_argument(
+        '--shuffle',
+        action='store_true',
+        help='Activar modo aleatorio para playlist'
+    )
+    parser.add_argument(
+        '--loop',
+        action='store_true',
+        help='Activar repetición automática de playlist'
+    )
     
     args = parser.parse_args()
     
@@ -55,12 +65,29 @@ def main():
         logger.info("Iniciando Reproductor Multimedia Inteligente GOAT...")
         player = GOATPlayer(width=args.width, height=args.height)
         
+        # Configurar modos si se especifican
+        if args.shuffle:
+            player.toggle_shuffle()
+        if args.loop:
+            player.toggle_loop()
+        
         # Cargar medios si se proporcionan
         if args.media:
-            if not player.load_media(args.media):
-                logger.error("Error al cargar archivo multimedia")
-                return 1
-            player.play()
+            if len(args.media) == 1:
+                # Un solo archivo
+                if not player.load_media(args.media[0]):
+                    logger.error("Error al cargar archivo multimedia")
+                    return 1
+                player.play()
+            else:
+                # Múltiples archivos = playlist
+                player.load_playlist(args.media)
+                if player.playlist:
+                    if player.load_media(player.playlist[0]):
+                        player.play()
+                    else:
+                        logger.error("Error al cargar primer archivo de playlist")
+                        return 1
         
         # Bucle principal
         running = True
