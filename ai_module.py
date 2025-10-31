@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-GOAT AI Integration Module
-Provides intelligent features like mood detection, playlist generation, and adaptive visuals
+GOAT Módulo de Integración IA
+Proporciona características inteligentes como detección de estado de ánimo, generación de listas de reproducción y visuales adaptativos
 """
 
 import numpy as np
@@ -14,54 +14,54 @@ logger = logging.getLogger(__name__)
 
 class AIModule:
     """
-    AI Module for intelligent media analysis and recommendations
+    Módulo IA para análisis inteligente de medios y recomendaciones
     """
     
     def __init__(self):
-        """Initialize AI module"""
+        """Inicializar módulo IA"""
         self.mood_model = None
         self.genre_model = None
-        logger.info("AI Module initialized")
+        logger.info("Módulo IA inicializado")
     
     def analyze_mood(self, audio_features: Dict) -> str:
         """
-        Analyze audio mood based on features
-        Returns: mood string (e.g., 'energetic', 'calm', 'dark', 'uplifting')
+        Analizar estado de ánimo del audio basándose en características
+        Retorna: cadena de estado de ánimo (ej., 'energético', 'calmado', 'oscuro', 'animado')
         """
         try:
             if audio_features.get('tempo', 0) == 0:
-                return 'unknown'
+                return 'desconocido'
             
             tempo = audio_features['tempo']
             
-            # Simple rule-based mood detection
-            # In production, would use trained ML model
+            # Detección simple de estado de ánimo basada en reglas
+            # En producción, usaría modelo ML entrenado
             
             if tempo > 140:
-                return 'energetic'
+                return 'energético'
             elif tempo > 120:
-                return 'upbeat'
+                return 'animado'
             elif tempo > 90:
-                return 'moderate'
+                return 'moderado'
             elif tempo > 70:
-                return 'calm'
+                return 'calmado'
             else:
-                return 'ambient'
+                return 'ambiental'
                 
         except Exception as e:
-            logger.error(f"Error analyzing mood: {e}")
-            return 'unknown'
+            logger.error(f"Error al analizar estado de ánimo: {e}")
+            return 'desconocido'
     
     def detect_key_moments(self, audio_data: np.ndarray, sample_rate: int) -> List[float]:
         """
-        Detect key moments in audio (drops, crescendos, etc.)
-        Returns: list of timestamps
+        Detectar momentos clave en audio (caídas, crescendos, etc.)
+        Retorna: lista de marcas de tiempo
         """
         try:
-            # Detect onset strength
+            # Detectar fuerza de inicio
             onset_env = librosa.onset.onset_strength(y=audio_data, sr=sample_rate)
             
-            # Find peaks
+            # Encontrar picos
             peaks = librosa.util.peak_pick(
                 onset_env,
                 pre_max=3,
@@ -72,67 +72,67 @@ class AIModule:
                 wait=10
             )
             
-            # Convert to timestamps
+            # Convertir a marcas de tiempo
             timestamps = librosa.frames_to_time(peaks, sr=sample_rate)
             
-            logger.info(f"Detected {len(timestamps)} key moments")
+            logger.info(f"Detectados {len(timestamps)} momentos clave")
             return timestamps.tolist()
             
         except Exception as e:
-            logger.error(f"Error detecting key moments: {e}")
+            logger.error(f"Error al detectar momentos clave: {e}")
             return []
     
     def generate_adaptive_palette(self, mood: str) -> List[tuple]:
         """
-        Generate color palette based on mood
+        Generar paleta de colores basada en estado de ánimo
         """
         palettes = {
-            'energetic': [
-                (255, 0, 0),      # Red
-                (255, 128, 0),    # Orange
-                (255, 255, 0),    # Yellow
+            'energético': [
+                (255, 0, 0),      # Rojo
+                (255, 128, 0),    # Naranja
+                (255, 255, 0),    # Amarillo
             ],
-            'upbeat': [
-                (255, 192, 0),    # Gold
-                (0, 255, 128),    # Spring Green
+            'animado': [
+                (255, 192, 0),    # Dorado
+                (0, 255, 128),    # Verde Primavera
                 (255, 0, 255),    # Magenta
             ],
-            'moderate': [
-                (0, 128, 255),    # Sky Blue
-                (128, 255, 0),    # Lime
-                (255, 128, 255),  # Pink
+            'moderado': [
+                (0, 128, 255),    # Azul Cielo
+                (128, 255, 0),    # Lima
+                (255, 128, 255),  # Rosa
             ],
-            'calm': [
-                (0, 128, 255),    # Blue
-                (128, 0, 255),    # Purple
-                (0, 255, 255),    # Cyan
+            'calmado': [
+                (0, 128, 255),    # Azul
+                (128, 0, 255),    # Púrpura
+                (0, 255, 255),    # Cian
             ],
-            'ambient': [
-                (64, 0, 128),     # Deep Purple
-                (0, 64, 128),     # Deep Blue
-                (64, 128, 128),   # Teal
+            'ambiental': [
+                (64, 0, 128),     # Púrpura Profundo
+                (0, 64, 128),     # Azul Profundo
+                (64, 128, 128),   # Verde Azulado
             ],
-            'unknown': [
-                (128, 128, 128),  # Gray
-                (192, 192, 192),  # Light Gray
-                (255, 255, 255),  # White
+            'desconocido': [
+                (128, 128, 128),  # Gris
+                (192, 192, 192),  # Gris Claro
+                (255, 255, 255),  # Blanco
             ]
         }
         
-        return palettes.get(mood, palettes['unknown'])
+        return palettes.get(mood, palettes['desconocido'])
     
     def analyze_genre(self, audio_features: Dict) -> str:
         """
-        Estimate genre based on audio features
+        Estimar género basándose en características de audio
         """
         try:
             tempo = audio_features.get('tempo', 0)
             
-            # Simple rule-based genre detection
-            # In production, would use trained classifier
+            # Detección simple de género basada en reglas
+            # En producción, usaría clasificador entrenado
             
             if tempo > 140:
-                return 'electronic/dance'
+                return 'electrónica/dance'
             elif tempo > 120:
                 return 'rock/pop'
             elif tempo > 90:
@@ -140,20 +140,20 @@ class AIModule:
             elif tempo > 60:
                 return 'jazz/soul'
             else:
-                return 'ambient/classical'
+                return 'ambiental/clásica'
                 
         except Exception as e:
-            logger.error(f"Error analyzing genre: {e}")
-            return 'unknown'
+            logger.error(f"Error al analizar género: {e}")
+            return 'desconocido'
     
     def suggest_visualization(self, mood: str, genre: str) -> str:
         """
-        Suggest optimal visualization mode based on mood and genre
+        Sugerir modo de visualización óptimo basado en estado de ánimo y género
         """
-        # Map moods and genres to visualization preferences
-        if mood in ['energetic', 'upbeat']:
+        # Mapear estados de ánimo y géneros a preferencias de visualización
+        if mood in ['energético', 'animado']:
             return 'particles'
-        elif mood in ['calm', 'ambient']:
+        elif mood in ['calmado', 'ambiental']:
             return 'waveform'
         else:
             return 'spectrum'
@@ -165,20 +165,20 @@ class AIModule:
         count: int = 10
     ) -> List[str]:
         """
-        Generate intelligent playlist based on seed track features
+        Generar lista de reproducción inteligente basada en características de pista semilla
         
         Args:
-            seed_features: Audio features of seed track
-            available_tracks: List of available tracks with features
-            count: Number of tracks to include
+            seed_features: Características de audio de pista semilla
+            available_tracks: Lista de pistas disponibles con características
+            count: Número de pistas a incluir
             
         Returns:
-            List of track paths
+            Lista de rutas de pistas
         """
-        # In production, would use similarity measures and ML
-        # This is a placeholder for the functionality
+        # En producción, usaría medidas de similitud y ML
+        # Esto es un marcador de posición para la funcionalidad
         
-        logger.info(f"Generating playlist with {count} tracks")
+        logger.info(f"Generando lista de reproducción con {count} pistas")
         return []
     
     def enhance_visuals_with_ai(
@@ -187,14 +187,14 @@ class AIModule:
         current_time: float
     ) -> Dict:
         """
-        Provide AI-enhanced visual parameters
+        Proporcionar parámetros visuales mejorados por IA
         
         Returns:
-            Dict with visual enhancement parameters
+            Dict con parámetros de mejora visual
         """
         try:
-            # Get spectral features at current time
-            frame_idx = int(current_time * 22050 / 512)  # Assuming sr=22050, hop=512
+            # Obtener características espectrales en tiempo actual
+            frame_idx = int(current_time * 22050 / 512)  # Asumiendo sr=22050, hop=512
             
             enhancement = {
                 'intensity': 1.0,
@@ -203,18 +203,18 @@ class AIModule:
                 'glow_amount': 0.5
             }
             
-            # Adjust based on audio features
+            # Ajustar basándose en características de audio
             if audio_features.get('spectral_centroid') is not None:
                 sc = audio_features['spectral_centroid']
                 if frame_idx < len(sc):
-                    # Normalize spectral centroid to [0, 1]
+                    # Normalizar centroide espectral a [0, 1]
                     intensity = min(sc[frame_idx] / 3000.0, 2.0)
                     enhancement['intensity'] = intensity
             
             return enhancement
             
         except Exception as e:
-            logger.error(f"Error enhancing visuals: {e}")
+            logger.error(f"Error al mejorar visuales: {e}")
             return {
                 'intensity': 1.0,
                 'color_shift': 0.0,
@@ -225,25 +225,25 @@ class AIModule:
 
 class AdaptiveVisualEngine:
     """
-    Adaptive visual engine that responds to AI analysis
+    Motor visual adaptativo que responde al análisis IA
     """
     
     def __init__(self, ai_module: AIModule):
-        """Initialize adaptive visual engine"""
+        """Inicializar motor visual adaptativo"""
         self.ai_module = ai_module
-        self.current_mood = 'unknown'
+        self.current_mood = 'desconocido'
         self.color_palette = []
-        logger.info("Adaptive Visual Engine initialized")
+        logger.info("Motor Visual Adaptativo inicializado")
     
     def update(self, audio_features: Dict, current_time: float):
-        """Update visual parameters based on current audio state"""
-        # Analyze mood
+        """Actualizar parámetros visuales basándose en estado de audio actual"""
+        # Analizar estado de ánimo
         self.current_mood = self.ai_module.analyze_mood(audio_features)
         
-        # Get adaptive color palette
+        # Obtener paleta de colores adaptativa
         self.color_palette = self.ai_module.generate_adaptive_palette(self.current_mood)
         
-        # Get AI-enhanced parameters
+        # Obtener parámetros mejorados por IA
         enhancements = self.ai_module.enhance_visuals_with_ai(audio_features, current_time)
         
         return {
